@@ -6,10 +6,10 @@ import Tkinter as tkinter # Python 2
 from PIL import Image, ImageDraw, ImageOps
 import numpy as np
 
-import chainer
 import chainer.links as L
-import chainer.functions as F
 from chainer import serializers
+
+import net
 
 # name
 fileName = "outfile.png" # save png name
@@ -27,20 +27,6 @@ BAR_WIDTH = 30
 
 # color depth
 draw_depth = int(50. /100.*255) #50%
-
-class MLP(chainer.Chain):
-
-    def __init__(self, n_in, n_units, n_out):
-        super(MLP, self).__init__(
-            l1=L.Linear(n_in, n_units),
-            l2=L.Linear(n_units, n_units),
-            l3=L.Linear(n_units, n_out),
-        )
-
-    def __call__(self, x):
-        h1 = F.relu(self.l1(x))
-        h2 = F.relu(self.l2(h1))
-        return self.l3(h2)
 
 class Scribble():
 
@@ -80,22 +66,22 @@ class Scribble():
         pr_resize = 1. - pr_resize # invert black and white
 
         # regit recognition using the neural network(NN)
-        h1 = F.dropout(F.relu(self.mlp.l1(chainer.Variable(pr_resize.reshape(1,784)))),train=False)
-        h2 = F.dropout(F.relu(self.mlp.l2(h1)),train=False)
-        y = self.mlp.l3(h2)
+        y = self.mlp(pr_resize.reshape(1,784))
 
         # show the result
-        self.result.delete("result") # delete the previous data
+        self.result.delete("result") # clear the previous data
+        val = []
         for i in range(10):
             # format the value 
-            val = max(np.array(y.data)[0][i],0.) / np.max(np.array(y.data))
+            val.append(max(np.array(y.data)[0][i],0.) / np.max(np.array(y.data)))
 
+        for i in range(10):
             # show the bar
-            self.result.create_rectangle(30,i*BAR_WIDTH+BAR_SPACE,30+int((window_width-60)*val),(i+1)*BAR_WIDTH,tag="result")
+            self.result.create_rectangle(30,i*BAR_WIDTH+BAR_SPACE,30+int((window_width-60)*(val[i]/sum(val))),(i+1)*BAR_WIDTH,tag="result")
 
             # show the number and the NN's output
             self.result.create_text(15,i*BAR_WIDTH+BAR_SPACE+BAR_WIDTH/2,text=str(i),tag="result")
-            self.result.create_text(window_width-15,i*BAR_WIDTH+BAR_SPACE+BAR_WIDTH/2,text=str("%.2f"%val),tag="result")
+            self.result.create_text(window_width-15,i*BAR_WIDTH+BAR_SPACE+BAR_WIDTH/2,text=str("%.2f"%(val[i]/sum(val))),tag="result")
 
     def clear(self):
         # clear the surface canvas
@@ -156,7 +142,7 @@ class Scribble():
         self.draw = ImageDraw.Draw(self.image1)
 
         # set neural network model
-        self.mlp = MLP(784,1000,10)
+        self.mlp = net.MLP(784,1000,10)
         model = L.Classifier(self.mlp)
         serializers.load_hdf5(modelName, model)
             
