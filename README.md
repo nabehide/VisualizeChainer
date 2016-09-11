@@ -22,5 +22,5 @@ https://github.com/nabehide/VisualizeChainer/releases/download/v1.0.0/20160818_M
     3. Draw a digit on the canvas.
     4. Press 'judge' button, and then the recognition result appears.
 
-![](https://cloud.githubusercontent.com/assets/18606082/17755347/87c44a9e-6514-11e6-826d-1ebf02304d21.png)
+![](https://qiita-image-store.s3.amazonaws.com/0/136986/2dbc97c6-1f41-e511-a9f7-5af29b662e63.png)
 
