@@ -1,5 +1,6 @@
 *.pyc
 *.model
 *.png
+*.zip
 .DS_Store
 .gitconfig
