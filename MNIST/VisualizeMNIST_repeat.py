@@ -38,11 +38,18 @@ draw_depth = int(50. / 100. * 255)  # 50%
 class Scribble():
 
     def on_pressed(self, event):
+        """
+        Mouse press event.
+        Get mouse position.
+        """
         self.sx = event.x
         self.sy = event.y
 
     def on_dragged(self, event):
-        # draw surface canvas
+        """
+        Mouse Drag event.
+        Draw surface canvas.
+        """
         self.canvas.create_line(self.sx, self.sy, event.x, event.y,
                                 width=5,
                                 tag="draw")
@@ -57,14 +64,20 @@ class Scribble():
             self.draw.line(((self.sx+1,self.sy+1),(event.x+1,event.y+1)),(color,color,color),width/28)
             self.draw.line(((self.sx-1,self.sy-1),(event.x-1,event.y-1)),(color,color,color),width/28)
         """
-        self.draw.line(((self.sx, self.sy), (event.x, event.y)), (draw_depth, draw_depth, draw_depth), int(window_width / 28 * 3))
+        self.draw.line(
+            ((self.sx, self.sy), (event.x, event.y)),
+            (draw_depth, draw_depth, draw_depth),
+            int(window_width / 28 * 3)
+        )
 
         # store the position in the buffer
         self.sx = event.x
         self.sy = event.y
 
     def judge(self):
-        # save png and convert to values
+        """
+        Recognize digit from canvas using neural network.
+        """
         self.image1.save(fileName)
         input_image = Image.open(fileName)
         gray_image = ImageOps.grayscale(input_image)
@@ -75,22 +88,25 @@ class Scribble():
         # regit recognition using the neural network(NN)
         y = self.mlp(pr_resize.reshape(1, 784))
 
-        # show the result
-        self.result.delete("result")  # clear the previous data
+        # show result
+        self.result.delete("result")  # clear previous data
         val = []
         for i in range(10):
-            # format the value
+            # format values
             val.append(max(np.array(y.data)[0][i], 0.) / np.max(np.array(y.data)))
 
         for i in range(10):
-            # show the bar
+            # show result bars
             self.result.create_rectangle(30, i * BAR_WIDTH + BAR_SPACE, 30 + int((window_width - 60) * (val[i] / sum(val))), (i + 1) * BAR_WIDTH, tag="result")
 
-            # show the number and the NN's output
+            # show recognized number and NN's outputs
             self.result.create_text(15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str(i), tag="result")
             self.result.create_text(window_width - 15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str("%.2f" % (val[i] / sum(val))), tag="result")
 
     def clear(self):
+        """
+        Clear canvas.
+        """
         # clear the surface canvas
         self.canvas.delete("draw")
 
@@ -102,45 +118,63 @@ class Scribble():
         self.result.delete("result")
 
     def create_window(self):
+        """
+        Create GUI.
+        """
         window = tkinter.Tk()
 
         # canvas frame
-        canvas_frame = tkinter.LabelFrame(window, bg="white",
-                                          text="canvas",
-                                          width=window_width, height=window_height,
-                                          relief='groove', borderwidth=4)
+        canvas_frame = tkinter.LabelFrame(
+            window, bg="white",
+            text="canvas",
+            width=window_width, height=window_height,
+            relief='groove', borderwidth=4
+        )
         canvas_frame.pack(side=tkinter.LEFT)
-        self.canvas = tkinter.Canvas(canvas_frame, bg="white",
-                                     width=canvas_width, height=canvas_height,
-                                     relief='groove', borderwidth=4)
+        self.canvas = tkinter.Canvas(
+            canvas_frame, bg="white",
+            width=canvas_width, height=canvas_height,
+            relief='groove', borderwidth=4
+        )
         self.canvas.pack()
-        quit_button = tkinter.Button(canvas_frame, text="exit",
-                                     command=window.quit)
+        quit_button = tkinter.Button(
+            canvas_frame, text="exit",
+            command=window.quit
+        )
         quit_button.pack(side=tkinter.RIGHT)
         # judge_button = tkinter.Button(canvas_frame, text = "judge",
         #                              width = button_width, height = button_height,
         #                              command = self.judge)
         # judge_button.pack(side = tkinter.LEFT)
-        clear_button = tkinter.Button(canvas_frame, text="clear",
-                                      command=self.clear)
+        clear_button = tkinter.Button(
+            canvas_frame, text="clear",
+            command=self.clear
+        )
         clear_button.pack(side=tkinter.LEFT)
         self.canvas.bind("<ButtonPress-1>", self.on_pressed)
         self.canvas.bind("<B1-Motion>", self.on_dragged)
 
         # result frame
-        result_frame = tkinter.LabelFrame(window, bg="white",
-                                          text="result",
-                                          width=window_width, height=window_height,
-                                          relief='groove', borderwidth=4)
+        result_frame = tkinter.LabelFrame(
+            window, bg="white",
+            text="result",
+            width=window_width, height=window_height,
+            relief='groove', borderwidth=4
+        )
         result_frame.pack(side=tkinter.RIGHT)
-        self.result = tkinter.Canvas(result_frame, bg="white",
-                                     width=window_width,
-                                     height=window_height)  # height=(BAR_WIDTH + BAR_SPACE) * 10)
+        self.result = tkinter.Canvas(
+            result_frame, bg="white",
+            width=window_width,
+            height=window_height)  # height=(BAR_WIDTH + BAR_SPACE) * 10)
         self.result.pack()
 
         return window
 
     def repeatJudge(self):
+        """
+        Sub process.
+        Repeat to recognize digit.
+        """
         while not self.stop_event.is_set():
             try:
                 self.judge()
@@ -153,13 +187,17 @@ class Scribble():
             time.sleep(0.5)
 
     def __init__(self):
+        """
+        Initial procedure.
+        Create GUI, set model file and processes start.
+        """
         self.window = self.create_window()
 
         # set canvas
         self.image1 = Image.new("RGB", (window_width, window_height), (255, 255, 255))
         self.draw = ImageDraw.Draw(self.image1)
 
-        # set neural network model
+        # set neural network model file
         self.mlp = net.MLP(784, 1000, 10)
         model = L.Classifier(self.mlp)
         try:
@@ -167,14 +205,21 @@ class Scribble():
         except IOError:
             pass
 
+        # sub process starts
         self.stop_event = threading.Event()
         th_me = threading.Thread(target=self.repeatJudge)
         th_me.start()
 
     def __exit__(self):
+        """
+        Sub process stops when GUI closes.
+        """
         self.stop_event.set()
 
     def run(self):
+        """
+        GUI mainloop starts.
+        """
         self.window.mainloop()
 
 
