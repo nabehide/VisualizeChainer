@@ -138,7 +138,10 @@ class Scribble():
 
     def repeatJudge(self):
         while not self.stop_event.is_set():
-            self.judge()
+            try:
+                self.judge()
+            except RuntimeError:
+                return
             time.sleep(0.5)
 
     def __init__(self):
