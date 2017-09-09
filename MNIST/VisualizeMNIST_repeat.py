@@ -142,6 +142,10 @@ class Scribble():
                 self.judge()
             except RuntimeError:
                 return
+            except ValueError:
+                print('Please check model file')
+                self.window.quit()
+                return
             time.sleep(0.5)
 
     def __init__(self):
@@ -154,7 +158,10 @@ class Scribble():
         # set neural network model
         self.mlp = net.MLP(784, 1000, 10)
         model = L.Classifier(self.mlp)
-        serializers.load_hdf5(modelName, model)
+        try:
+            serializers.load_hdf5(modelName, model)
+        except IOError:
+            pass
 
         self.stop_event = threading.Event()
         th_me = threading.Thread(target=self.repeatJudge)
