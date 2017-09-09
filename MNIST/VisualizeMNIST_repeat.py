@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
-import Tkinter as tkinter  # Python 2
-# import tkinter # Python 3
+import sys
 
 from PIL import Image, ImageDraw, ImageOps
 import numpy as np
@@ -12,6 +11,11 @@ import chainer.links as L
 from chainer import serializers
 
 import net
+
+if sys.version_info[0] == 2:  # python2
+    import Tkinter as tkinter
+else:  # Python 3
+    import tkinter
 
 # name
 fileName = "outfile.png"  # save png name
@@ -53,7 +57,7 @@ class Scribble():
             self.draw.line(((self.sx+1,self.sy+1),(event.x+1,event.y+1)),(color,color,color),width/28)
             self.draw.line(((self.sx-1,self.sy-1),(event.x-1,event.y-1)),(color,color,color),width/28)
         """
-        self.draw.line(((self.sx, self.sy), (event.x, event.y)), (draw_depth, draw_depth, draw_depth), window_width / 28 * 3)
+        self.draw.line(((self.sx, self.sy), (event.x, event.y)), (draw_depth, draw_depth, draw_depth), int(window_width / 28 * 3))
 
         # store the position in the buffer
         self.sx = event.x
