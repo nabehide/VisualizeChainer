@@ -1,6 +1,7 @@
 branches:
   only:
     - travis
+    - master
 
 language: python
 
