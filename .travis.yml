@@ -9,8 +9,7 @@ python:
   - 3.5
 
 install:
-  - export DISPLAY=':99.0'
-  - Xvfb :99 -screen 1024x768x24 > /dev/null 2>&1 &
+  - export DISPLAY=:0.0
   - pip install -r requirements.txt
 
 script:
