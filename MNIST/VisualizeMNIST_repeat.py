@@ -50,9 +50,10 @@ class Scribble():
         Mouse Drag event.
         Draw surface canvas.
         """
-        self.canvas.create_line(self.sx, self.sy, event.x, event.y,
-                                width=5,
-                                tag="draw")
+        self.canvas.create_line(
+            self.sx, self.sy, event.x, event.y,
+            width=5, tag="draw"
+        )
 
         # draw hidden canvas
         # I was going to write the code which could make gradation like MNIST.
@@ -81,7 +82,9 @@ class Scribble():
         self.image1.save(fileName)
         input_image = Image.open(fileName)
         gray_image = ImageOps.grayscale(input_image)
-        pr_resize = np.array(gray_image.resize((28, 28)).getdata()).astype(np.float32)
+        pr_resize = np.array(
+            gray_image.resize((28, 28)).getdata()
+        ).astype(np.float32)
         pr_resize /= 255.
         pr_resize = 1. - pr_resize  # invert black and white
 
@@ -93,15 +96,28 @@ class Scribble():
         val = []
         for i in range(10):
             # format values
-            val.append(max(np.array(y.data)[0][i], 0.) / np.max(np.array(y.data)))
+            val.append(
+                max(np.array(y.data)[0][i], 0.) / np.max(np.array(y.data))
+            )
 
         for i in range(10):
             # show result bars
-            self.result.create_rectangle(30, i * BAR_WIDTH + BAR_SPACE, 30 + int((window_width - 60) * (val[i] / sum(val))), (i + 1) * BAR_WIDTH, tag="result")
+            self.result.create_rectangle(
+                30, i * BAR_WIDTH + BAR_SPACE,
+                30 + int((window_width - 60) * (val[i] / sum(val))),
+                (i + 1) * BAR_WIDTH, tag="result"
+            )
 
             # show recognized number and NN's outputs
-            self.result.create_text(15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str(i), tag="result")
-            self.result.create_text(window_width - 15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str("%.2f" % (val[i] / sum(val))), tag="result")
+            self.result.create_text(
+                15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2,
+                text=str(i), tag="result"
+            )
+            self.result.create_text(
+                window_width - 15,
+                i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2,
+                text=str("%.2f" % (val[i] / sum(val))), tag="result"
+            )
 
     def clear(self):
         """
@@ -111,7 +127,9 @@ class Scribble():
         self.canvas.delete("draw")
 
         # clear(initialize) the hidden canvas
-        self.image1 = Image.new("RGB", (window_width, window_height), (255, 255, 255))
+        self.image1 = Image.new(
+            "RGB", (window_width, window_height), (255, 255, 255)
+        )
         self.draw = ImageDraw.Draw(self.image1)
 
         # clear the result
@@ -142,10 +160,6 @@ class Scribble():
             command=window.quit
         )
         quit_button.pack(side=tkinter.RIGHT)
-        # judge_button = tkinter.Button(canvas_frame, text = "judge",
-        #                              width = button_width, height = button_height,
-        #                              command = self.judge)
-        # judge_button.pack(side = tkinter.LEFT)
         clear_button = tkinter.Button(
             canvas_frame, text="clear",
             command=self.clear
@@ -194,7 +208,9 @@ class Scribble():
         self.window = self.create_window()
 
         # set canvas
-        self.image1 = Image.new("RGB", (window_width, window_height), (255, 255, 255))
+        self.image1 = Image.new(
+            "RGB", (window_width, window_height), (255, 255, 255)
+        )
         self.draw = ImageDraw.Draw(self.image1)
 
         # set neural network model file

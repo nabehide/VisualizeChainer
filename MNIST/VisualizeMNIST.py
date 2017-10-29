@@ -53,7 +53,11 @@ class Scribble():
             self.draw.line(((self.sx+1,self.sy+1),(event.x+1,event.y+1)),(color,color,color),width/28)
             self.draw.line(((self.sx-1,self.sy-1),(event.x-1,event.y-1)),(color,color,color),width/28)
         """
-        self.draw.line(((self.sx, self.sy), (event.x, event.y)), (draw_depth, draw_depth, draw_depth), int(window_width / 28 * 3))
+        self.draw.line(
+            ((self.sx, self.sy), (event.x, event.y)),
+            (draw_depth, draw_depth, draw_depth),
+            int(window_width / 28 * 3)
+        )
 
         # store the position in the buffer
         self.sx = event.x
@@ -64,7 +68,9 @@ class Scribble():
         self.image1.save(fileName)
         input_image = Image.open(fileName)
         gray_image = ImageOps.grayscale(input_image)
-        pr_resize = np.array(gray_image.resize((28, 28)).getdata()).astype(np.float32)
+        pr_resize = np.array(
+            gray_image.resize((28, 28)).getdata()
+        ).astype(np.float32)
         pr_resize /= 255.
         pr_resize = 1. - pr_resize  # invert black and white
 
@@ -76,22 +82,38 @@ class Scribble():
         self.val = []
         for i in range(10):
             # format the value
-            self.val.append(max(np.array(y.data)[0][i], 0.) / np.max(np.array(y.data)))
+            self.val.append(
+                max(np.array(y.data)[0][i], 0.) / np.max(np.array(y.data))
+            )
 
         for i in range(10):
             # show the bar
-            self.result.create_rectangle(30, i * BAR_WIDTH + BAR_SPACE, 30 + int((window_width - 60) * (self.val[i] / sum(self.val))), (i + 1) * BAR_WIDTH, tag="result")
+            self.result.create_rectangle(
+                30, i * BAR_WIDTH + BAR_SPACE,
+                30 + int((window_width - 60) * (self.val[i] / sum(self.val))),
+                (i + 1) * BAR_WIDTH, tag="result"
+            )
 
             # show the number and the NN's output
-            self.result.create_text(15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str(i), tag="result")
-            self.result.create_text(window_width - 15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str("%.2f" % (self.val[i] / sum(self.val))), tag="result")
+            self.result.create_text(
+                15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2,
+                text=str(i), tag="result"
+            )
+            self.result.create_text(
+                window_width - 15,
+                i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2,
+                text=str("%.2f" % (self.val[i] / sum(self.val))),
+                tag="result"
+            )
 
     def clear(self):
         # clear the surface canvas
         self.canvas.delete("draw")
 
         # clear(initialize) the hidden canvas
-        self.image1 = Image.new("RGB", (window_width, window_height), (255, 255, 255))
+        self.image1 = Image.new(
+            "RGB", (window_width, window_height), (255, 255, 255)
+        )
         self.draw = ImageDraw.Draw(self.image1)
 
         # clear the result
@@ -101,10 +123,12 @@ class Scribble():
         window = tkinter.Tk()
 
         # canvas frame
-        canvas_frame = tkinter.LabelFrame(window, bg="white",
-                                          text="canvas",
-                                          width=window_width, height=window_height,
-                                          relief='groove', borderwidth=4)
+        canvas_frame = tkinter.LabelFrame(
+            window, bg="white",
+            text="canvas",
+            width=window_width, height=window_height,
+            relief='groove', borderwidth=4
+        )
         canvas_frame.pack(side=tkinter.LEFT)
         self.canvas = tkinter.Canvas(canvas_frame, bg="white",
                                      width=canvas_width, height=canvas_height,
@@ -124,14 +148,18 @@ class Scribble():
         self.canvas.bind("<B1-Motion>", self.on_dragged)
 
         # result frame
-        result_frame = tkinter.LabelFrame(window, bg="white",
-                                          text="result",
-                                          width=window_width, height=window_height,
-                                          relief='groove', borderwidth=4)
+        result_frame = tkinter.LabelFrame(
+            window, bg="white",
+            text="result",
+            width=window_width, height=window_height,
+            relief='groove', borderwidth=4
+        )
         result_frame.pack(side=tkinter.RIGHT)
-        self.result = tkinter.Canvas(result_frame, bg="white",
-                                     width=window_width,
-                                     height=window_height)  # height = (BAR_WIDTH+BAR_SPACE)*10)
+        self.result = tkinter.Canvas(
+            result_frame, bg="white",
+            width=window_width,
+            height=window_height
+        )  # height = (BAR_WIDTH+BAR_SPACE)*10)
         self.result.pack()
 
         return window
@@ -143,7 +171,9 @@ class Scribble():
         self.window = self.create_window()
 
         # set canvas
-        self.image1 = Image.new("RGB", (window_width, window_height), (255, 255, 255))
+        self.image1 = Image.new(
+            "RGB", (window_width, window_height), (255, 255, 255)
+        )
         self.draw = ImageDraw.Draw(self.image1)
 
         # set neural network model
