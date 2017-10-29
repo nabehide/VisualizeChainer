@@ -3,3 +3,10 @@ language: python
 branches:
   only:
     - travis
+
+python:
+  - 2.7
+  - 3.5
+
+script:
+  - pytest
