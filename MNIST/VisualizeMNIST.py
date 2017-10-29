@@ -1,8 +1,5 @@
 # -*- coding:utf-8 -*-
 
-import Tkinter as tkinter  # Python 2
-# import tkinter  # Python 3
-
 from PIL import Image, ImageDraw, ImageOps
 import numpy as np
 
@@ -11,9 +8,14 @@ from chainer import serializers
 
 import net
 
+import sys
+if sys.version_info[0] == 2:  # python2
+    import Tkinter as tkinter
+else:  # Python 3
+    import tkinter
+
 # name
 fileName = "outfile.png"  # save png name
-modelName = '20160818_MNIST.model'
 
 # size
 window_width = 300
@@ -51,7 +53,7 @@ class Scribble():
             self.draw.line(((self.sx+1,self.sy+1),(event.x+1,event.y+1)),(color,color,color),width/28)
             self.draw.line(((self.sx-1,self.sy-1),(event.x-1,event.y-1)),(color,color,color),width/28)
         """
-        self.draw.line(((self.sx, self.sy), (event.x, event.y)), (draw_depth, draw_depth, draw_depth), window_width / 28 * 3)
+        self.draw.line(((self.sx, self.sy), (event.x, event.y)), (draw_depth, draw_depth, draw_depth), int(window_width / 28 * 3))
 
         # store the position in the buffer
         self.sx = event.x
@@ -71,18 +73,18 @@ class Scribble():
 
         # show the result
         self.result.delete("result")  # clear the previous data
-        val = []
+        self.val = []
         for i in range(10):
             # format the value
-            val.append(max(np.array(y.data)[0][i], 0.) / np.max(np.array(y.data)))
+            self.val.append(max(np.array(y.data)[0][i], 0.) / np.max(np.array(y.data)))
 
         for i in range(10):
             # show the bar
-            self.result.create_rectangle(30, i * BAR_WIDTH + BAR_SPACE, 30 + int((window_width - 60) * (val[i] / sum(val))), (i + 1) * BAR_WIDTH, tag="result")
+            self.result.create_rectangle(30, i * BAR_WIDTH + BAR_SPACE, 30 + int((window_width - 60) * (self.val[i] / sum(self.val))), (i + 1) * BAR_WIDTH, tag="result")
 
             # show the number and the NN's output
             self.result.create_text(15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str(i), tag="result")
-            self.result.create_text(window_width - 15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str("%.2f" % (val[i] / sum(val))), tag="result")
+            self.result.create_text(window_width - 15, i * BAR_WIDTH + BAR_SPACE + BAR_WIDTH / 2, text=str("%.2f" % (self.val[i] / sum(self.val))), tag="result")
 
     def clear(self):
         # clear the surface canvas
@@ -134,7 +136,10 @@ class Scribble():
 
         return window
 
-    def __init__(self):
+    def __init__(self, modelName='20160818_MNIST.model'):
+
+        self.modelName = modelName
+
         self.window = self.create_window()
 
         # set canvas
@@ -144,7 +149,7 @@ class Scribble():
         # set neural network model
         self.mlp = net.MLP(784, 1000, 10)
         model = L.Classifier(self.mlp)
-        serializers.load_hdf5(modelName, model)
+        serializers.load_hdf5(self.modelName, model)
 
     def run(self):
         self.window.mainloop()
