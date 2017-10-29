@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/nabehide/VisualizeChainer.svg?branch=travis)](https://travis-ci.org/nabehide/VisualizeChainer)
 
 # VisualizeChainer
 This code can check your neural networks which was trained using chainer example code.
