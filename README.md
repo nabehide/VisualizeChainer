@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/nabehide/VisualizeChainer.svg?branch=travis)](https://travis-ci.org/nabehide/VisualizeChainer)
 [![Coverage Status](https://coveralls.io/repos/github/nabehide/VisualizeChainer/badge.svg?branch=master)](https://coveralls.io/github/nabehide/VisualizeChainer?branch=master)
+[![Code Climate](https://codeclimate.com/github/nabehide/VisualizeChainer.png)](https://codeclimate.com/github/nabehide/VisualizeChainer)
+[![Dependency Status](https://gemnasium.com/badges/github.com/nabehide/VisualizeChainer.svg)](https://gemnasium.com/github.com/nabehide/VisualizeChainer)
 
 # VisualizeChainer
 This code can check your neural networks which was trained using chainer example code.
