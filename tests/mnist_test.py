@@ -1,4 +1,3 @@
-import pytest
 from unittest import TestCase
 
 import sys
@@ -9,11 +8,9 @@ from VisualizeMNIST import Scribble
 
 class TestScribble(TestCase):
 
-    @pytest.mark.skipif("True")
     def test_on_pressed(self):
         self.assertTrue(True)
 
-    @pytest.mark.skipif("True")
     def test_on_dragged(self):
         self.assertTrue(True)
 
@@ -23,7 +20,3 @@ class TestScribble(TestCase):
         )
         scribble.judge()
         assert 5 == scribble.val.index(max(scribble.val))
-
-
-if __name__ == '__main__':
-    pytest.main()
