@@ -49,7 +49,7 @@ jobs:
           name: download model file
           command: |
             ./MNIST/download_modelfile.sh
-      #       mv 20160818_MNIST.model MNIST/.
+            mv 20160818_MNIST.model MNIST/.
 
       - save_cache:
           paths:
