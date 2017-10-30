@@ -21,6 +21,7 @@ install:
 
 script:
   - pytest
+  - coverage run mnist_test.py
 
 after_success:
   - coveralls
