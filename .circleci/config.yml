@@ -39,9 +39,10 @@ jobs:
 
       - run:
           name: Running X virtual framebuffer
+          sh: /bin/sh
           command: |
             export DISPLAY=:99.0
-      #       sh -e /etc/init.d/xvfb start
+            sh -e /etc/init.d/xvfb start
 
       - run:
           name: download model file
