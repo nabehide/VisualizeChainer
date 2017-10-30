@@ -1,8 +1,10 @@
 [![Build Status](https://travis-ci.org/nabehide/VisualizeChainer.svg?branch=travis)](https://travis-ci.org/nabehide/VisualizeChainer)
+[![CircleCI](https://circleci.com/gh/nabehide/VisualizeChainer.svg?style=svg)](https://circleci.com/gh/nabehide/VisualizeChainer)
 [![Coverage Status](https://coveralls.io/repos/github/nabehide/VisualizeChainer/badge.svg?branch=master)](https://coveralls.io/github/nabehide/VisualizeChainer?branch=master)
 [![codecov](https://codecov.io/gh/nabehide/VisualizeChainer/branch/master/graph/badge.svg)](https://codecov.io/gh/nabehide/VisualizeChainer)
 [![Code Climate](https://codeclimate.com/github/nabehide/VisualizeChainer.png)](https://codeclimate.com/github/nabehide/VisualizeChainer)
 [![Dependency Status](https://gemnasium.com/badges/github.com/nabehide/VisualizeChainer.svg)](https://gemnasium.com/github.com/nabehide/VisualizeChainer)
+[![GitHub stars](https://img.shields.io/github/stars/nabehide/VisualizeChainer.svg)](https://github.com/nabehide/VisualizeChainer/stargazers)
 
 # VisualizeChainer
 This code can check your neural networks which was trained using chainer example code.
