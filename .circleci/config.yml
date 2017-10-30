@@ -8,9 +8,9 @@ jobs:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.1
-      - image: circleci/python:3.5.4
-      - image: circleci/python:2.7.13
+      - image: circleci/python:3.6.1-browsers
+      - image: circleci/python:3.5.4-browsers
+      - image: circleci/python:2.7.13-browsers
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -36,6 +36,12 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
             pip install pytest
+
+      - run:
+          name: download model file
+          command: |
+            ./MNIST/download_modelfile.sh
+            mv 20160818_MNIST.model MNIST/.
 
       - save_cache:
           paths:
