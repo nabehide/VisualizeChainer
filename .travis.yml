@@ -1,7 +1,6 @@
 branches:
   only:
     - travis
-    - master
 
 language: python
 
@@ -17,10 +16,11 @@ before_install:
 
 install:
   - pip install -r requirements.txt
-  - pip install coveralls
+  - pip install coveralls codecov
 
 script:
   - pytest
 
 after_success:
   - coveralls
+  - codecov
