@@ -31,7 +31,7 @@ BAR_WIDTH = 30
 draw_depth = int(50. / 100. * 255)  # 50%
 
 
-class Scribble():
+class Scribble(object):
 
     def on_pressed(self, event):
         self.sx = event.x
