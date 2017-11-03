@@ -6,3 +6,4 @@
 .gitconfig
 .cache/
 *~
+.coverage

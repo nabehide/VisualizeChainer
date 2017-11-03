@@ -24,12 +24,12 @@ class Scribble(sc):
                 return
             time.sleep(0.5)
 
-    def __init__(self):
+    def __init__(self, modelName='20160818_MNIST.model'):
         """
         Initial procedure.
         Create GUI, set model file and processes start.
         """
-        super(Scribble, self).__init__()
+        super(Scribble, self).__init__(modelName)
 
         # sub process starts
         self.stop_event = threading.Event()
