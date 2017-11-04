@@ -5,6 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/nabehide/VisualizeChainer.png)](https://codeclimate.com/github/nabehide/VisualizeChainer)
 [![Dependency Status](https://gemnasium.com/badges/github.com/nabehide/VisualizeChainer.svg)](https://gemnasium.com/github.com/nabehide/VisualizeChainer)
 [![GitHub stars](https://img.shields.io/github/stars/nabehide/VisualizeChainer.svg)](https://github.com/nabehide/VisualizeChainer/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 # VisualizeChainer
 This code can check your neural networks which was trained using chainer example code.
